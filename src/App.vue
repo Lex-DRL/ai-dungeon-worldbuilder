@@ -11,7 +11,7 @@ export default {
   data() {
     return {
       context: null,
-      theme: 'light'
+      theme: 'dark'
     }
   },
   created() {

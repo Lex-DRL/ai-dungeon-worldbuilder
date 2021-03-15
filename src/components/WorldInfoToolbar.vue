@@ -50,7 +50,7 @@ export default {
   },
   created() {
     let mode = localStorage.getItem('theme');
-    if(!mode) { mode = 'light' }
+    if(!mode) { mode = 'dark' }
     this.theme = mode;
   },
   methods: {      
