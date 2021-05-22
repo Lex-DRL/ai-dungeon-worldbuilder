@@ -2,13 +2,22 @@
 <div class="toolbar">
 
   <div class="app-header__title">
-    <h1 class="nomargin">World Infos</h1>
+    <h1 class="nomargin">
+      World Infos
+      <span class="text-danger" v-if="!context.isPristine">*</span>
+    </h1>
   </div>
 
   <div>
     <div class="btn-group mr-3">      
       <button class="btn btn-sm btn-outline-secondary" @click="toggleTheme()" title="Set View Mode">
         <font-awesome-icon class="text-info" icon="eye" />
+      </button>
+    </div>
+    <div class="btn-group mr-3">      
+      <button class="btn btn-sm btn-outline-secondary" @click="toggleEditor()">
+        <font-awesome-icon class="text-info" icon="code" title="Json Edit Mode" v-if="editor === 'WorldInfo'" />
+        <font-awesome-icon class="text-info" icon="pen" title="List Edit Mode" v-else />
       </button>
     </div>
     <div class="btn-group">
@@ -45,7 +54,8 @@ export default {
   props: { context: Object },
   data() {
     return {      
-      theme: null
+      theme: null,
+      editor: "WorldInfo"
     }
   },
   created() {
@@ -103,7 +113,8 @@ export default {
     },
 
     saveWorldEntries() {
-      ipc.saveWorldEntries({filePath: this.context.WorldEntriesFilePath, worldEntries: this.context.WorldInfos}).then(() => {
+      ipc.saveWorldEntries({filePath: this.context.WorldEntriesFilePath, worldEntries: this.context.WorldInfos}).then(() => {        
+        this.context.isPristine = true;
         this.$toasted.global.saveProject();
       });
     },
@@ -132,8 +143,13 @@ export default {
       }
       localStorage.setItem('theme', this.theme);
       this.$emit('set-theme', this.theme);
-    }
+    },
 
+    
+    toggleEditor() {
+      this.editor = (this.editor === 'WorldInfo') ? 'JsonEditor' : 'WorldInfo';
+      this.$router.push({ name: this.editor });
+    }
     //------------------------------------------------------------- 
   }
 }
